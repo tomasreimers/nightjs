@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+var debug = require('debug')('nightjs');
+var app = require('../app');
+var db = require('../models');
+
+app.set('port', process.env.PORT || 3000);
+
+var server = undefined;
+
+db.sequelize.sync().complete(function(err) {
+    if (err) {
+        throw err[0];
+    } else {
+        server = app.listen(app.get('port'), function() {
+            debug('Express server listening on port ' + server.address().port);
+        });
+    }
+});
